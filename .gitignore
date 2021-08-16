@@ -1,0 +1,7 @@
+/node_modules
+
+/target
+/dist
+
+/styles/tailwind.css
+/styles/tailwind.min.css
