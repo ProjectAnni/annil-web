@@ -1,0 +1,12 @@
+{
+  "emmet.includeLanguages": {
+    "rust": "html"
+  },
+  "css.validate": false,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "tailwindCSS.includeLanguages": {
+    "rust": "html"
+  }
+}

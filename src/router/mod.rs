@@ -2,6 +2,7 @@ use yew::prelude::*;
 pub use yew_router::prelude::*;
 
 mod auth;
+pub use auth::Auth;
 use auth::*;
 
 use crate::views::*;

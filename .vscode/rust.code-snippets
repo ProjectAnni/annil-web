@@ -1,0 +1,41 @@
+{
+  "Create new Yew component": {
+    "prefix": "Create Yew Component",
+    "description": "Create a new Yew component without properties but with a message enum",
+    "body": [
+      "use yew::prelude::*;",
+      "",
+      "pub struct ${1} {",
+      "    link: ComponentLink<Self>,",
+      "}",
+      "",
+      "pub enum Msg {",
+      "}",
+      "",
+      "impl Component for ${1} {",
+      "    type Message = Msg;",
+      "    type Properties = ();",
+      "",
+      "    fn create(_props: Self::Properties, link: ComponentLink<Self>) -> Self {",
+      "        Self {",
+      "            link,",
+      "        }",
+      "    }",
+      "",
+      "    fn update(&mut self, msg: Self::Message) -> ShouldRender {",
+      "        match msg {}",
+      "    }",
+      "",
+      "    fn change(&mut self, _props: Self::Properties) -> ShouldRender {",
+      "        false",
+      "    }",
+      "",
+      "    fn view(&self) -> Html {",
+      "        html! {",
+      "            ${0}",
+      "        }",
+      "    }",
+      "}"
+    ]
+  }
+}
