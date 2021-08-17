@@ -6,6 +6,8 @@ use router::*;
 mod components;
 mod views;
 
+mod utils;
+
 use components::header::*;
 
 #[global_allocator]

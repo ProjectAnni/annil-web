@@ -1,6 +1,9 @@
 use yew::prelude::*;
 
-use crate::router::{Auth, Route};
+use crate::{
+    router::{Auth, Route},
+    utils::local_storage,
+};
 
 #[function_component(Login)]
 pub fn login() -> Html {
@@ -18,11 +21,7 @@ pub fn login() -> Html {
                 // invalid jwt
                 return;
             }
-            let window: web_sys::Window = web_sys::window().expect("window not available");
-            let local_storage: web_sys::Storage = window
-                .local_storage()
-                .expect("localStorage not available")
-                .expect("None localStorage object got");
+            let local_storage = local_storage();
             local_storage
                 .set_item("auth", &data)
                 .expect("failed to set item to localStorage");

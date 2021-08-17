@@ -18,8 +18,8 @@ pub enum Route {
     Login,
 
     /// Play route for audio playback of selected music
-    #[at("/play/:catalog/:track")]
-    Play { catalog: String, track: u8 },
+    #[at("/play/:catalog/:track_number")]
+    Play { catalog: String, track_number: u8 },
 }
 
 pub fn switch(routes: &Route) -> Html {
@@ -30,11 +30,12 @@ pub fn switch(routes: &Route) -> Html {
             </AuthValidator>
         },
         Route::Login => html! { <Login /> },
-        Route::Play { catalog, track } => html! {
+        Route::Play {
+            catalog,
+            track_number,
+        } => html! {
             <AuthValidator to={Route::Login}>
-                // TODO: Play view
-                <h1> { catalog } </h1>
-                <span> { track } </span>
+                <Play catalog={catalog.clone()} track_number={*track_number}/>
             </AuthValidator>
         },
     };

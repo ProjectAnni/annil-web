@@ -6,12 +6,12 @@ version = 3
 name = "annil-web"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "log",
  "reqwasm",
  "serde",
  "wasm-bindgen-futures",
  "wasm-logger",
- "web-sys",
  "wee_alloc",
  "yew",
  "yew-router",

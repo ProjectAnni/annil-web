@@ -2,6 +2,8 @@ use std::{cell::RefCell, rc::Rc};
 
 use yew::prelude::*;
 
+use crate::utils::local_storage;
+
 use super::Route;
 
 pub type Auth = Rc<AuthInner>;
@@ -19,11 +21,7 @@ pub struct AuthProviderProps {
 
 #[function_component(AuthProvider)]
 pub fn auth_provider(props: &AuthProviderProps) -> Html {
-    let window: web_sys::Window = web_sys::window().expect("window not available");
-    let local_storage: web_sys::Storage = window
-        .local_storage()
-        .expect("localStorage not available")
-        .expect("None localStorage object got");
+    let local_storage = local_storage();
     let jwt = local_storage
         .get_item("auth")
         .expect("failed to get item from localStorage")
