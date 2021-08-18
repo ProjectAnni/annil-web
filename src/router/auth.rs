@@ -28,7 +28,7 @@ pub fn auth_provider(props: &AuthProviderProps) -> Html {
         .expect("failed to get auth from localStorage")
         .unwrap_or(String::new());
     let server = local_storage
-        .get_item("servere")
+        .get_item("server")
         .expect("failed to get server from localStorage")
         .unwrap_or(String::new());
     let ctx = use_state(|| {

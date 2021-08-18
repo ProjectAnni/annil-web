@@ -10,19 +10,21 @@ pub struct PlayProps {
 
 #[function_component(Play)]
 pub fn play(props: &PlayProps) -> Html {
-    let auth = use_context::<Auth>().expect("Failed to get auth in context");
-
     let cover = use_state(|| String::new());
-    let cover_url = format!("{}{}/cover", auth.server.borrow(), props.catalog);
+    let auth = use_context::<Auth>().expect("Failed to get auth in context");
     {
         let cover = cover.clone();
+        let catalog = props.catalog.clone();
         use_effect(move || {
-            wasm_bindgen_futures::spawn_local(async move {
-                match request_create_object_url(&cover_url, &auth.jwt.borrow()).await {
-                    Ok(url) => cover.set(url),
-                    Err(err) => log::error!("{:?}", err),
-                }
-            });
+            if cover.is_empty() {
+                let cover_url = format!("{}{}/cover", auth.server.borrow(), catalog);
+                wasm_bindgen_futures::spawn_local(async move {
+                    match request_create_object_url(&cover_url, &auth.jwt.borrow()).await {
+                        Ok(url) => cover.set(url),
+                        Err(err) => log::error!("{:?}", err),
+                    };
+                });
+            }
             || ()
         });
     }

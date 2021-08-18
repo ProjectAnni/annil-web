@@ -4,7 +4,7 @@ use yew::prelude::*;
 pub fn header() -> Html {
     html! {
         <header class="bg-gray-800 p-4">
-            <h1 class="text-xl font-bold text-white">{ "Annil-web" }</h1>
+            <h1 class="text-xl font-bold text-white">{ "Annil-Web" }</h1>
         </header>
     }
 }
