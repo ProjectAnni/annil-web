@@ -11,6 +11,7 @@ pub type Auth = Rc<AuthInner>;
 #[derive(Debug, PartialEq)]
 pub struct AuthInner {
     pub jwt: RefCell<String>,
+    pub server: RefCell<String>,
 }
 
 #[derive(Properties, Clone, PartialEq)]
@@ -24,11 +25,16 @@ pub fn auth_provider(props: &AuthProviderProps) -> Html {
     let local_storage = local_storage();
     let jwt = local_storage
         .get_item("auth")
-        .expect("failed to get item from localStorage")
+        .expect("failed to get auth from localStorage")
+        .unwrap_or(String::new());
+    let server = local_storage
+        .get_item("servere")
+        .expect("failed to get server from localStorage")
         .unwrap_or(String::new());
     let ctx = use_state(|| {
         Rc::new(AuthInner {
             jwt: RefCell::new(jwt),
+            server: RefCell::new(server),
         })
     });
 
