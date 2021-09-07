@@ -2,7 +2,8 @@
   "scripts": {
     "postinstall": "tailwindcss -c ./styles/tailwind.config.js -o ./styles/tailwind.css",
     "dev": "TRUNK_BUILD_TARGET='index_dev.html' trunk serve",
-    "build": "NODE_ENV=production tailwindcss -c ./styles/tailwind.config.js -o ./styles/tailwind.min.css --minify && trunk build --release"
+    "build-tailwindcss": "NODE_ENV=production tailwindcss -c ./styles/tailwind.config.js -o ./styles/tailwind.min.css --minify",
+    "build": "yarn build-tailwindcss && trunk build --release"
   },
   "dependencies": {
     "tailwindcss": "^2.2.7",

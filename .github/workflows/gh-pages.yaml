@@ -1,0 +1,47 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Annil-Web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Initialize rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+
+      - name: Cargo install requirements
+        uses: actions-rs/cargo@v1
+        with:
+          command: install
+          args: trunk wasm-bindgen-cli
+
+      - name: Install dependencies
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: install
+
+      - name: Build tailwindcss
+        uses: borales/actions-yarn@v2.3.0
+        with:
+          cmd: build-tailwindcss
+
+      - name: Build
+        run: trunk build --release
+
+      - name: Create 404.html
+        run: cp ./dist/index.html ./dist/404.html
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist

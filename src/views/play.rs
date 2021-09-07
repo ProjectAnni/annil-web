@@ -84,7 +84,7 @@ pub fn play(props: &PlayProps) -> Html {
                 <div class="flex">
                   <div class="p-8">
                     <img
-                      class="w-full rounded hidden md:block max-h-96 max-w-96"
+                      class="w-full rounded hidden md:block min-h-96 max-h-96 min-w-96 max-w-96"
                       src={cover.to_string()}
                       alt="Album Pic"
                     />
