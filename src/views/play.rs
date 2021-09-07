@@ -57,9 +57,19 @@ pub fn play(props: &PlayProps) -> Html {
         let audio_player = audio_player.clone();
         Callback::from(move |_| {
             if let Some(audio) = audio_player.cast::<web_sys::HtmlAudioElement>() {
-                // TODO: play / pause
-                audio.play().expect("Failed to play audio");
-                // TODO: change icon
+                wasm_bindgen_futures::spawn_local(async move {
+                    // toggle music
+                    if audio.paused() {
+                        let toggle_play = audio.play().expect("Failed to play audio");
+                        if let Err(err) = wasm_bindgen_futures::JsFuture::from(toggle_play).await {
+                            log::error!("{:?}", err);
+                        }
+                    } else {
+                        audio.pause().expect("Failed to pause audio")
+                    }
+
+                    // change icon
+                });
             } else {
                 unreachable!()
             }
@@ -67,9 +77,9 @@ pub fn play(props: &PlayProps) -> Html {
     };
 
     html! {
-        <div class="w-full">
-            <audio class="hidden" src={audio.to_string()} ref={audio_player}></audio>
-            <div class="flex items-center justify-center h-screen bg-red-lightest">
+        <div class="w-full flex flex-grow items-center justify-center">
+            <div class="flex items-center justify-center">
+              <audio class="hidden" src={audio.to_string()} ref={audio_player}></audio>
               <div class="bg-white shadow-lg rounded-lg w-180">
                 <div class="flex">
                   <div class="p-8">
