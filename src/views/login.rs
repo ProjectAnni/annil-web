@@ -19,30 +19,32 @@ pub fn login() -> Html {
     let onclick = {
         let auth = auth.clone();
         Callback::from(move |_| {
-            let local_storage = local_storage();
+            {
+                let local_storage = local_storage();
 
-            let mut server = auth.server.borrow_mut();
-            if server.is_empty() {
-                alert("Empty server address");
-                return;
-            }
-            if !server.ends_with('/') {
-                *server = format!("{}/", server);
-            }
-            local_storage
-                .set_item("server", &server)
-                .expect("failed to set item to localStorage");
+                let mut server = auth.server.borrow_mut();
+                if server.is_empty() {
+                    alert("Empty server address");
+                    return;
+                }
+                if !server.ends_with('/') {
+                    *server = format!("{}/", server);
+                }
+                local_storage
+                    .set_item("server", &server)
+                    .expect("failed to set item to localStorage");
 
-            let jwt = auth.jwt.borrow();
-            let splitted: Vec<_> = jwt.split(".").collect();
-            if splitted.len() != 3 {
-                // invalid jwt
-                alert("Invalid JWT");
-                return;
+                let jwt = auth.jwt.borrow();
+                let splitted: Vec<_> = jwt.split(".").collect();
+                if splitted.len() != 3 {
+                    // invalid jwt
+                    alert("Invalid JWT");
+                    return;
+                }
+                local_storage
+                    .set_item("auth", &jwt)
+                    .expect("failed to set item to localStorage");
             }
-            local_storage
-                .set_item("auth", &jwt)
-                .expect("failed to set item to localStorage");
 
             yew_router::push_route(Route::Index);
         })
