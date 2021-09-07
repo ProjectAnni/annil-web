@@ -7,29 +7,25 @@ on:
 
 jobs:
   deploy:
-    name: Annil-Web
+    name: Deploy to gh-pages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - name: Initialize rust toolchain
-        uses: actions-rs/toolchain@v1
+      - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
           target: wasm32-unknown-unknown
 
-      - name: Cargo install requirements
-        uses: actions-rs/cargo@v1
-        with:
-          command: install
-          args: trunk wasm-bindgen-cli
+      - uses: jetli/trunk-action@v0.1.0
+      - uses: jetli/wasm-bindgen-action@v0.1.0
 
       - name: Install dependencies
         uses: borales/actions-yarn@v2.3.0
         with:
           cmd: install
 
-      - name: Build tailwindcss
+      - name: Prepare tailwindcss
         uses: borales/actions-yarn@v2.3.0
         with:
           cmd: build-tailwindcss
@@ -45,3 +41,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          cname: annil-web.mmf.moe
