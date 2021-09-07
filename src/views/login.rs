@@ -20,8 +20,7 @@ pub fn login() -> Html {
         let auth = auth.clone();
         Callback::from(move |_| {
             {
-                let local_storage = local_storage();
-
+                // validate server address
                 let mut server = auth.server.borrow_mut();
                 if server.is_empty() {
                     alert("Empty server address");
@@ -30,10 +29,8 @@ pub fn login() -> Html {
                 if !server.ends_with('/') {
                     *server = format!("{}/", server);
                 }
-                local_storage
-                    .set_item("server", &server)
-                    .expect("failed to set item to localStorage");
 
+                // validate jwt format
                 let jwt = auth.jwt.borrow();
                 let splitted: Vec<_> = jwt.split(".").collect();
                 if splitted.len() != 3 {
@@ -41,6 +38,14 @@ pub fn login() -> Html {
                     alert("Invalid JWT");
                     return;
                 }
+
+                // TODO: validate whether jwt is available
+
+                // save information to localStorage
+                let local_storage = local_storage();
+                local_storage
+                    .set_item("server", &server)
+                    .expect("failed to set item to localStorage");
                 local_storage
                     .set_item("auth", &jwt)
                     .expect("failed to set item to localStorage");
