@@ -1,10 +1,7 @@
-use std::{cell::RefCell, rc::Rc};
-
-use yew::prelude::*;
-
-use crate::utils::local_storage;
-
 use super::Route;
+use crate::utils::local_storage;
+use std::{cell::RefCell, rc::Rc};
+use yew::prelude::*;
 
 pub type Auth = Rc<AuthInner>;
 
@@ -12,6 +9,24 @@ pub type Auth = Rc<AuthInner>;
 pub struct AuthInner {
     pub jwt: RefCell<String>,
     pub server: RefCell<String>,
+}
+
+impl AuthInner {
+    pub async fn get_cover_url(&self, catalog: &str) -> anyhow::Result<String> {
+        crate::utils::request_create_object_url(
+            &format!("{}{}/cover", self.server.borrow(), catalog),
+            self.jwt.borrow().as_str(),
+        )
+        .await
+    }
+
+    pub async fn get_music_url(&self, catalog: &str, track_number: u8) -> anyhow::Result<String> {
+        crate::utils::request_create_object_url(
+            &format!("{}{}/{}", self.server.borrow(), catalog, track_number),
+            self.jwt.borrow().as_str(),
+        )
+        .await
+    }
 }
 
 #[derive(Properties, Clone, PartialEq)]

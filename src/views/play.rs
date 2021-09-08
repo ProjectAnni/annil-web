@@ -1,7 +1,7 @@
 use yew::prelude::*;
 
 use crate::components::icons::*;
-use crate::{router::Auth, utils::request_create_object_url};
+use crate::router::Auth;
 
 #[derive(Properties, Clone, PartialEq)]
 pub struct PlayProps {
@@ -12,22 +12,19 @@ pub struct PlayProps {
 #[function_component(Play)]
 pub fn play(props: &PlayProps) -> Html {
     let auth = use_context::<Auth>().expect("Failed to get auth in context");
-    let base = format!("{}{}", auth.server.borrow(), props.catalog);
-    let jwt = auth.jwt.borrow().clone();
 
     let cover = use_state(|| String::new());
     {
         let cover = cover.clone();
-        let base = base.clone();
-        let jwt = jwt.clone();
+        let auth = auth.clone();
+        let props = props.clone();
         use_effect(move || {
             if cover.is_empty() {
-                let cover_url = format!("{}/cover", base);
                 wasm_bindgen_futures::spawn_local(async move {
-                    match request_create_object_url(&cover_url, &jwt).await {
+                    match auth.get_cover_url(&props.catalog).await {
                         Ok(url) => cover.set(url),
                         Err(err) => log::error!("{:?}", err),
-                    };
+                    }
                 });
             }
             || ()
@@ -37,19 +34,19 @@ pub fn play(props: &PlayProps) -> Html {
     let audio = use_state(|| String::new());
     {
         let audio = audio.clone();
-        let track_number = props.track_number;
+        let auth = auth.clone();
+        let props = props.clone();
         use_effect(move || {
             if audio.is_empty() {
-                let audio_url = format!("{}/{}", base, track_number);
                 wasm_bindgen_futures::spawn_local(async move {
-                    match request_create_object_url(&audio_url, &jwt).await {
+                    match auth.get_music_url(&props.catalog, props.track_number).await {
                         Ok(url) => audio.set(url),
                         Err(err) => log::error!("{:?}", err),
                     };
                 });
             }
             || ()
-        })
+        });
     }
 
     let audio_player = NodeRef::default();
