@@ -21,7 +21,7 @@ pub fn play(props: &PlayProps) -> Html {
         use_effect(move || {
             if cover.is_empty() {
                 wasm_bindgen_futures::spawn_local(async move {
-                    match auth.get_cover_url(&props.catalog).await {
+                    match auth.get_cover_url(props.catalog.clone()).await {
                         Ok(url) => cover.set(url),
                         Err(err) => log::error!("{:?}", err),
                     }
@@ -39,7 +39,10 @@ pub fn play(props: &PlayProps) -> Html {
         use_effect(move || {
             if audio.is_empty() {
                 wasm_bindgen_futures::spawn_local(async move {
-                    match auth.get_music_url(&props.catalog, props.track_number).await {
+                    match auth
+                        .get_music_url(props.catalog.clone(), props.track_number)
+                        .await
+                    {
                         Ok(url) => audio.set(url),
                         Err(err) => log::error!("{:?}", err),
                     };

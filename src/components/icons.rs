@@ -1,5 +1,21 @@
 use yew::prelude::*;
 
+// https://www.zondicons.com/
+
+#[function_component(IconPlay)]
+pub fn icon_play() -> Html {
+    html! {
+      <svg
+        class="w-8 h-8"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+      >
+        <path d="M4 4l12 6-12 6z" />
+      </svg>
+    }
+}
+
 #[function_component(IconPause)]
 pub fn icon_pause() -> Html {
     html! {
