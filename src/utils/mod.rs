@@ -4,6 +4,10 @@ use reqwasm::http::Request;
 use wasm_bindgen_futures::JsFuture;
 use yew::web_sys::{Blob, RequestMode, Storage, Url};
 
+pub async fn request_auth_url(url: &str, authorization: &str) -> anyhow::Result<String> {
+    Ok(format!("{}?auth={}", url, authorization))
+}
+
 pub async fn request_create_object_url(url: &str, authorization: &str) -> anyhow::Result<String> {
     let response = Request::get(url)
         .mode(RequestMode::Cors)
